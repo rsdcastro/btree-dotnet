@@ -61,13 +61,39 @@
         }
 
         [TestMethod]
+        public void DeleteNonExistingNode()
+        {
+            var btree = new BTree<int, int>(Degree);
+
+            for (int i = 0; i < this.testKeyData.Length; i++)
+            {
+                this.InsertTestData(btree, i);
+            }
+
+            btree.Delete(99999);
+            TreeValidation.ValidateTree(btree.Root, Degree, this.testKeyData.ToArray());
+        }
+
+        [TestMethod]
         public void SearchNodes()
         {
             var btree = new BTree<int, int>(Degree);
 
-            const int NewKey1 = 10;
-            const int NewPointer1 = 50;
-            btree.Insert(NewKey1, NewPointer1);
+            for (int i = 0; i < this.testKeyData.Length; i++)
+            {
+                this.InsertTestData(btree, i);
+                this.SearchTestData(btree, i);
+            }
+        }
+
+        [TestMethod]
+        public void SearchNonExistingNode()
+        {
+            var btree = new BTree<int, int>(Degree);
+
+            // search an empty tree
+            Entry<int, int> nonExisting = btree.Search(9999);
+            Assert.IsNull(nonExisting);
 
             for (int i = 0; i < this.testKeyData.Length; i++)
             {
@@ -75,7 +101,8 @@
                 this.SearchTestData(btree, i);
             }
 
-            Entry<int, int> nonExisting = btree.Search(9999);
+            // search a populated tree
+            nonExisting = btree.Search(9999);
             Assert.IsNull(nonExisting);
         }
 
