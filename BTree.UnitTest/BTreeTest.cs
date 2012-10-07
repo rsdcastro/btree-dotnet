@@ -30,6 +30,7 @@
         {
             var btree = new BTree<int, int>(Degree);
             this.InsertTestDataAndValidateTree(btree, 0);
+            Assert.AreEqual(1, btree.Height);
         }
 
         [TestMethod]
@@ -41,6 +42,8 @@
             {
                 this.InsertTestDataAndValidateTree(btree, i);
             }
+
+            Assert.AreEqual(2, btree.Height);
         }
 
         [TestMethod]
@@ -58,6 +61,8 @@
                 btree.Delete(this.testKeyData[i]);
                 TreeValidation.ValidateTree(btree.Root, Degree, this.testKeyData.Skip(i + 1).ToArray());
             }
+
+            Assert.AreEqual(1, btree.Height);
         }
 
         [TestMethod]

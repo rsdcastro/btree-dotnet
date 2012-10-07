@@ -6,6 +6,8 @@
 
     /// <summary>
     /// Based on BTree chapter in "Introduction to Algorithms", by Thomas Cormen, Charles Leiserson, Ronald Rivest.
+    /// 
+    /// This implementation is not thread-safe, and user must handle thread-safety.
     /// </summary>
     /// <typeparam name="TK">Type of BTree Key.</typeparam>
     /// <typeparam name="TP">Type of BTree Pointer associated with each Key.</typeparam>
@@ -20,11 +22,14 @@
 
             this.Root = new Node<TK, TP>(degree);
             this.Degree = degree;
+            this.Height = 1;
         }
 
         public Node<TK, TP> Root { get; private set; }
 
         public int Degree { get; private set; }
+
+        public int Height { get; private set; }
 
         /// <summary>
         /// Searches a key in the BTree, returning the entry with it and with the pointer.
@@ -57,6 +62,8 @@
             this.Root.Children.Add(oldRoot);
             this.SplitChild(this.Root, 0, oldRoot);
             this.InsertNonFull(this.Root, newKey, newPointer);
+
+            this.Height++;
         }
 
         /// <summary>
@@ -72,6 +79,7 @@
             if (this.Root.Entries.Count == 0 && !this.Root.IsLeaf)
             {
                 this.Root = this.Root.Children.Single();
+                this.Height--;
             }
         }
 
@@ -109,7 +117,8 @@
             Node<TK, TP> childNode = parentNode.Children[subtreeIndexInNode];
 
             // node has reached min # of entries, and removing any from it will break the btree property,
-            // so this block makes sure that the "child" has at least "degree" # of nodes
+            // so this block makes sure that the "child" has at least "degree" # of nodes by moving an 
+            // entry from a sibling node or merging nodes
             if (childNode.HasReachedMinEntries)
             {
                 int leftIndex = subtreeIndexInNode - 1;
