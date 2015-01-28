@@ -66,6 +66,25 @@
         }
 
         [TestMethod]
+        public void DeleteNodeBackwards()
+        {
+            var btree = new BTree<int, int>(Degree);
+
+            for (int i = 0; i < this.testKeyData.Length; i++)
+            {
+                this.InsertTestData(btree, i);
+            }
+
+            for (int i = this.testKeyData.Length - 1; i > 0; i--)
+            {
+                btree.Delete(this.testKeyData[i]);
+                TreeValidation.ValidateTree(btree.Root, Degree, this.testKeyData.Take(i).ToArray());
+            }
+
+            Assert.AreEqual(1, btree.Height);
+        }
+
+        [TestMethod]
         public void DeleteNonExistingNode()
         {
             var btree = new BTree<int, int>(Degree);

@@ -162,7 +162,7 @@
                     // this block merges either left or right sibling into the current node "child"
                     if (leftSibling != null)
                     {
-                        childNode.Entries.Insert(0, parentNode.Entries[subtreeIndexInNode]);
+                        childNode.Entries.Insert(0, parentNode.Entries[subtreeIndexInNode - 1]);
                         var oldEntries = childNode.Entries;
                         childNode.Entries = leftSibling.Entries;
                         childNode.Entries.AddRange(oldEntries);
@@ -174,7 +174,7 @@
                         }
 
                         parentNode.Children.RemoveAt(leftIndex);
-                        parentNode.Entries.RemoveAt(subtreeIndexInNode);
+                        parentNode.Entries.RemoveAt(subtreeIndexInNode - 1);
                     }
                     else
                     {
