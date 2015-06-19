@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTree", "BTree\BTree.csproj", "{031678E5-2AD7-4426-8A9C-6A7E269F47C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTree.UnitTest", "BTree.UnitTest\BTree.UnitTest.csproj", "{30E77FAB-E067-4DB5-AFB2-5804444463B9}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4E52A89D-B694-4BF1-9F8C-41F8EE3B6E37}"
 	ProjectSection(SolutionItems) = preProject
 		LICENSE = LICENSE
 		README.txt = README.txt
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTree.Test", "BTree.Test\BTree.Test.csproj", "{EDA145AA-4E5E-43F7-8BB7-B2C85E585BEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +21,12 @@ Global
 		{031678E5-2AD7-4426-8A9C-6A7E269F47C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{031678E5-2AD7-4426-8A9C-6A7E269F47C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{031678E5-2AD7-4426-8A9C-6A7E269F47C8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{30E77FAB-E067-4DB5-AFB2-5804444463B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30E77FAB-E067-4DB5-AFB2-5804444463B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{30E77FAB-E067-4DB5-AFB2-5804444463B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{30E77FAB-E067-4DB5-AFB2-5804444463B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDA145AA-4E5E-43F7-8BB7-B2C85E585BEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDA145AA-4E5E-43F7-8BB7-B2C85E585BEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDA145AA-4E5E-43F7-8BB7-B2C85E585BEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDA145AA-4E5E-43F7-8BB7-B2C85E585BEC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,10 +1,10 @@
-﻿namespace BTree.UnitTest
+﻿using NUnit.Framework;
+
+namespace BTree.UnitTest
 {
-    using System.Linq;
+    using System.Linq;	   
 
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-    [TestClass]
+    [TestFixture]
     public class BTreeTest
     {
         private const int Degree = 2;
@@ -12,7 +12,7 @@
         private readonly int[] testKeyData = new int[] { 10, 20, 30, 50 };
         private readonly int[] testPointerData = new int[] { 50, 60, 40, 20 };
 
-        [TestMethod]
+        [Test]
         public void CreateBTree()
         {
             var btree = new BTree<int, int>(Degree);
@@ -25,7 +25,7 @@
             Assert.AreEqual(0, root.Children.Count);
         }
 
-        [TestMethod]
+        [Test]
         public void InsertOneNode()
         {
             var btree = new BTree<int, int>(Degree);
@@ -33,7 +33,7 @@
             Assert.AreEqual(1, btree.Height);
         }
 
-        [TestMethod]
+        [Test]
         public void InsertMultipleNodesToSplit()
         {
             var btree = new BTree<int, int>(Degree);
@@ -46,7 +46,7 @@
             Assert.AreEqual(2, btree.Height);
         }
 
-        [TestMethod]
+        [Test]
         public void DeleteNodes()
         {
             var btree = new BTree<int, int>(Degree);
@@ -65,7 +65,7 @@
             Assert.AreEqual(1, btree.Height);
         }
 
-        [TestMethod]
+        [Test]
         public void DeleteNodeBackwards()
         {
             var btree = new BTree<int, int>(Degree);
@@ -84,7 +84,7 @@
             Assert.AreEqual(1, btree.Height);
         }
 
-        [TestMethod]
+        [Test]
         public void DeleteNonExistingNode()
         {
             var btree = new BTree<int, int>(Degree);
@@ -98,7 +98,7 @@
             TreeValidation.ValidateTree(btree.Root, Degree, this.testKeyData.ToArray());
         }
 
-        [TestMethod]
+        [Test]
         public void SearchNodes()
         {
             var btree = new BTree<int, int>(Degree);
@@ -110,7 +110,7 @@
             }
         }
 
-        [TestMethod]
+        [Test]
         public void SearchNonExistingNode()
         {
             var btree = new BTree<int, int>(Degree);
@@ -129,6 +129,23 @@
             nonExisting = btree.Search(9999);
             Assert.IsNull(nonExisting);
         }
+
+		[Test]
+		public void RemoveFromLastWhichReachedMin()
+		{
+			var btree = new BTree<int, int>(Degree);
+			var leftNode = new Node<int, int>(Degree);
+			var rightNode = new Node<int, int>(Degree);
+
+			btree.Root.Children.Add(leftNode);
+			btree.Root.Children.Add(rightNode);
+
+			leftNode.Entries.Add(new Entry<int, int> (){ Key = 1, Pointer = 1 });
+			leftNode.Entries.Add(new Entry<int, int> (){ Key = 2, Pointer = 2 });
+			btree.Root.Entries.Add(new Entry<int, int> (){ Key = 3, Pointer = 3 });
+			rightNode.Entries.Add(new Entry<int, int> (){ Key = 4, Pointer = 4 });
+			btree.Delete(4);
+		}
 
         #region Private Helper Methods
         private void InsertTestData(BTree<int, int> btree, int testDataIndex)

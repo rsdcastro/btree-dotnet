@@ -133,8 +133,8 @@
                 {
                     // left sibling has a node to spare, so this moves one node from left sibling 
                     // into parent's node and one node from parent into this current node ("child")
-                    childNode.Entries.Insert(0, parentNode.Entries[subtreeIndexInNode]);
-                    parentNode.Entries[subtreeIndexInNode] = leftSibling.Entries.Last();
+                    childNode.Entries.Insert(0, parentNode.Entries[subtreeIndexInNode - 1]);
+                    parentNode.Entries[subtreeIndexInNode - 1] = leftSibling.Entries.Last();
                     leftSibling.Entries.RemoveAt(leftSibling.Entries.Count - 1);
 
                     if (!leftSibling.IsLeaf)
