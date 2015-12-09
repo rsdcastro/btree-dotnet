@@ -133,8 +133,8 @@
                 {
                     // left sibling has a node to spare, so this moves one node from left sibling 
                     // into parent's node and one node from parent into this current node ("child")
-                    childNode.Entries.Insert(0, parentNode.Entries[subtreeIndexInNode]);
-                    parentNode.Entries[subtreeIndexInNode] = leftSibling.Entries.Last();
+                    childNode.Entries.Insert(0, parentNode.Entries[subtreeIndexInNode - 1]);
+                    parentNode.Entries[subtreeIndexInNode - 1] = leftSibling.Entries.Last();
                     leftSibling.Entries.RemoveAt(leftSibling.Entries.Count - 1);
 
                     if (!leftSibling.IsLeaf)
@@ -162,7 +162,7 @@
                     // this block merges either left or right sibling into the current node "child"
                     if (leftSibling != null)
                     {
-                        childNode.Entries.Insert(0, parentNode.Entries[subtreeIndexInNode]);
+                        childNode.Entries.Insert(0, parentNode.Entries[subtreeIndexInNode - 1]);
                         var oldEntries = childNode.Entries;
                         childNode.Entries = leftSibling.Entries;
                         childNode.Entries.AddRange(oldEntries);
@@ -174,7 +174,7 @@
                         }
 
                         parentNode.Children.RemoveAt(leftIndex);
-                        parentNode.Entries.RemoveAt(subtreeIndexInNode);
+                        parentNode.Entries.RemoveAt(subtreeIndexInNode - 1);
                     }
                     else
                     {
@@ -218,16 +218,18 @@
             Node<TK, TP> predecessorChild = node.Children[keyIndexInNode];
             if (predecessorChild.Entries.Count >= this.Degree)
             {
-                Entry<TK, TP> predecessor = this.DeletePredecessor(predecessorChild);
-                node.Entries[keyIndexInNode] = predecessor;
+                Entry<TK, TP> predecessorEntry = this.GetLastEntry(predecessorChild);
+                this.DeleteInternal(predecessorChild, predecessorEntry.Key);
+                node.Entries[keyIndexInNode] = predecessorEntry;
             }
             else
             {
                 Node<TK, TP> successorChild = node.Children[keyIndexInNode + 1];
                 if (successorChild.Entries.Count >= this.Degree)
                 {
-                    Entry<TK, TP> successor = this.DeleteSuccessor(predecessorChild);
-                    node.Entries[keyIndexInNode] = successor;
+                    Entry<TK, TP> successorEntry = this.GetFirstEntry(successorChild);
+                    this.DeleteInternal(successorChild, successorEntry.Key);
+                    node.Entries[keyIndexInNode] = successorEntry;
                 }
                 else
                 {
@@ -244,37 +246,31 @@
         }
 
         /// <summary>
-        /// Helper method that deletes a predecessor key (i.e. rightmost key) for a given node.
+        /// Helper method that gets the last entry (i.e. rightmost key) for a given node.
         /// </summary>
-        /// <param name="node">Node for which the predecessor will be deleted.</param>
-        /// <returns>Predecessor entry that got deleted.</returns>
-        private Entry<TK, TP> DeletePredecessor(Node<TK, TP> node)
+        private Entry<TK, TP> GetLastEntry (Node<TK, TP> node)
         {
-            if (node.IsLeaf)
-            {
-                var result = node.Entries[node.Entries.Count - 1];
-                node.Entries.RemoveAt(node.Entries.Count - 1);
-                return result;
+            if (node.IsLeaf) {
+                return node.Entries.Last ();
             }
 
-            return this.DeletePredecessor(node.Children.Last());
+            return this.GetLastEntry (
+                node.Children.Last ()
+            );
         }
 
         /// <summary>
-        /// Helper method that deletes a successor key (i.e. leftmost key) for a given node.
+        /// Helper method that gets the first entry (i.e. leftmost key) for a given node.
         /// </summary>
-        /// <param name="node">Node for which the successor will be deleted.</param>
-        /// <returns>Successor entry that got deleted.</returns>
-        private Entry<TK, TP> DeleteSuccessor(Node<TK, TP> node)
+        private Entry<TK, TP> GetFirstEntry (Node<TK, TP> node)
         {
-            if (node.IsLeaf)
-            {
-                var result = node.Entries[0];
-                node.Entries.RemoveAt(0);
-                return result;
+            if (node.IsLeaf) {
+                return node.Entries.First ();
             }
 
-            return this.DeletePredecessor(node.Children.First());
+            return this.GetFirstEntry (
+                node.Children.First ()
+            );
         }
 
         /// <summary>

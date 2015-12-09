@@ -1,10 +1,10 @@
-﻿namespace BTree.UnitTest
+﻿using NUnit.Framework;
+
+namespace BTree.UnitTest
 {
     using System.Collections.Generic;
     using System.Linq;
-
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+	    
     public static class TreeValidation
     {
         public static void ValidateTree(Node<int, int> tree, int degree, params int[] expectedKeys)
