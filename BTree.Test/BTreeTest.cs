@@ -1,8 +1,9 @@
 ﻿using NUnit.Framework;
+using System;
 
 namespace BTree.UnitTest
 {
-    using System.Linq;	   
+    using System.Linq;
 
     [TestFixture]
     public class BTreeTest
@@ -146,6 +147,58 @@ namespace BTree.UnitTest
 			rightNode.Entries.Add(new Entry<int, int> (){ Key = 4, Pointer = 4 });
 			btree.Delete(4);
 		}
+
+        [Test]
+        public void BruteForceTest ()
+        {
+            for (int i = 0; i < 100; i++) {
+                RunBruteForce ();
+            }
+        }
+
+        public void RunBruteForce ()
+        {
+            var degree = 2;
+
+            var btree = new BTree<string, int> (degree);
+
+            var rand = new Random ();
+            for (int i = 0; i < 1000; i++) {
+                var value = (int)rand.Next () % 100;
+                var key = value.ToString ();
+
+                if (rand.Next () % 2 == 0) {
+                    if (btree.Search (key) == null) {
+                        btree.Insert (key, value);
+                    }
+                    Assert.AreEqual (value, btree.Search (key).Pointer);
+                } else {
+                    btree.Delete (key);
+                    Assert.IsNull (btree.Search (key));
+                }
+                CheckNode (btree.Root, degree);
+            }
+        }
+
+        private void CheckNode (Node<string, int> node, int degree)
+        {
+            if (node.Children.Count > 0 &&
+            node.Children.Count != node.Entries.Count + 1) {
+                Assert.Fail ("There are children, but they don't match the number of entries.");
+            }
+
+            if (node.Entries.Count > (2 * degree) - 1) {
+                Assert.Fail ("Too much entries in node");
+            }
+
+            if (node.Children.Count > degree * 2) {
+                Assert.Fail ("Too much children in node");
+            }
+
+            foreach (var child in node.Children) {
+                CheckNode (child, degree);
+            }
+        }
 
         #region Private Helper Methods
         private void InsertTestData(BTree<int, int> btree, int testDataIndex)
